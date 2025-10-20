@@ -1,0 +1,51 @@
+variant: fcos
+version: 1.6.0
+passwd:
+  users:
+    - name: admin
+      password_hash: $y$j9T$BfZt/k8m1pKzp5/m/eB5u/$TmSynWVZbQfZ6UNhrl8QczX90DCbR5XVgYPY/mbG8S0
+      groups:
+        - wheel
+        - sudo
+        - docker
+storage:
+  files:
+    - path: /etc/hostname
+      mode: 0644
+      contents:
+        inline: stormchaser
+    - path: /etc/zincati/config.d/90-disable-auto-updates.toml
+      mode: 0644
+      contents:
+        inline: |
+          [updates]
+          enabled = false
+    - path: /etc/systemd/system/rpm-ostree-countme.timer.d/40-weekly.conf
+      mode: 0644
+      contents:
+        inline: |
+          [Timer]
+          OnCalendar=weekly
+  directories:
+    - path: /etc/ucore-autorebase
+      mode: 0754
+systemd:
+  units:
+    - name: ucore-unsigned-autorebase.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=uCore autorebase to unsigned OCI and reboot
+        ConditionPathExists=!/etc/ucore-autorebase/unverified
+        ConditionPathExists=!/etc/ucore-autorebase/signed
+        After=network-online.target
+        Wants=network-online.target
+        [Service]
+        Type=oneshot
+        StandardOutput=journal+console
+        ExecStart=/usr/bin/rpm-ostree rebase --bypass-driver ostree-unverified-registry:ghcr.io/ublue-os/ucore:stable
+        ExecStart=/usr/bin/touch /etc/ucore-autorebase/unverified
+        ExecStart=/usr/bin/systemctl disable ucore-unsigned-autorebase.service
+        ExecStart=/usr/bin/systemctl reboot
+        [Install]
+        WantedBy=multi-user.target
