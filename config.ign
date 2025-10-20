@@ -22,34 +22,6 @@
         "mode": 492
       }
     ],
-    "disks": [
-      {
-        "device": "/dev/nvme0n1",
-        "partitions": [
-          {
-            "label": "EFI",
-            "sizeMiB": 600,
-            "typeGuid": "c12a7328-f81f-11d2-ba4b-00a0c93ec93b"
-          },
-          {
-            "label": "boot",
-            "sizeMiB": 1024,
-            "typeGuid": "0fc63daf-8483-4772-8e79-3d69d8477de4"
-          },
-          {
-            "label": "root",
-            "sizeMiB": 30720,
-            "typeGuid": "0fc63daf-8483-4772-8e79-3d69d8477de4"
-          },
-          {
-            "label": "var",
-            "sizeMiB": 0,
-            "typeGuid": "0fc63daf-8483-4772-8e79-3d69d8477de4"
-          }
-        ],
-        "wipeTable": true
-      }
-    ],
     "files": [
       {
         "path": "/etc/hostname",
@@ -74,38 +46,6 @@
           "source": "data:,%5BTimer%5D%0AOnCalendar%3Dweekly%0A"
         },
         "mode": 420
-      }
-    ],
-    "filesystems": [
-      {
-        "device": "/dev/disk/by-partlabel/boot",
-        "format": "ext4",
-        "label": "boot",
-        "mountOptions": [
-          "defaults"
-        ],
-        "path": "/boot",
-        "wipeFilesystem": true
-      },
-      {
-        "device": "/dev/disk/by-partlabel/root",
-        "format": "xfs",
-        "label": "root",
-        "mountOptions": [
-          "defaults"
-        ],
-        "path": "/sysroot",
-        "wipeFilesystem": true
-      },
-      {
-        "device": "/dev/disk/by-partlabel/var",
-        "format": "xfs",
-        "label": "var",
-        "mountOptions": [
-          "defaults"
-        ],
-        "path": "/var",
-        "wipeFilesystem": true
       }
     ]
   },
